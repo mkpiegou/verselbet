@@ -1,263 +1,178 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VercelBet — Plateforme d'investissement (€) — Prototype Professionnel</title>
-  <meta name="description" content="Prototype HTML/CSS/JS d'une plateforme d'investissement en euros, bien structurée, accessible et responsive. Nom : VercelBet." />
-  <style>
-    :root{
-      --bg:#f6f8fb;--card:#ffffff;--muted:#5d6b7a;--accent:#0f63d6;--accent-2:#0b3b82;--glass:rgba(255,255,255,0.6);
-      --radius:12px;--shadow:0 10px 30px rgba(11,37,69,0.06)
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#0b2545;background:linear-gradient(180deg,var(--bg),#eef4ff)}
-    a{color:inherit}
-
-    .container{max-width:1200px;margin:0 auto;padding:1rem}
-
-    /* Header */
-    header{backdrop-filter:saturate(130%) blur(6px);position:sticky;top:0;background:rgba(255,255,255,0.7);border-bottom:1px solid rgba(11,37,69,0.04);z-index:50}
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0}
-    .brand{display:flex;align-items:center;gap:.75rem}
-    .logo{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white;font-weight:700;font-family:monospace}
-    .brand h1{font-size:1.05rem;margin:0}
-    nav ul{display:flex;gap:.5rem;list-style:none;margin:0;padding:0}
-    nav a{padding:.45rem .75rem;border-radius:8px;text-decoration:none;font-weight:600}
-    nav a.cta{background:var(--accent);color:white}
-
-    /* Hero */
-    .hero{display:grid;grid-template-columns:1fr 420px;gap:1.5rem;align-items:center;padding:2rem 0}
-    .headline{font-size:1.45rem;margin:0;color:#06223d}
-    .sub{color:var(--muted);margin-top:.5rem}
-    .kpis{display:flex;gap:1rem;margin-top:1.25rem}
-    .kpi{background:var(--card);padding:.8rem;border-radius:10px;box-shadow:var(--shadow);flex:1}
-    .kpi strong{display:block;font-size:1.05rem}
-
-    /* Card / Panel */
-    .card{background:var(--card);padding:1rem;border-radius:var(--radius);box-shadow:var(--shadow)}
-
-    /* Plans */
-    .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem}
-    .plan{padding:1rem;border-radius:10px;text-align:center;border:1px solid rgba(11,37,69,0.04)}
-    .plan .price{font-size:1.25rem;margin:0.5rem 0}
-    .badge{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:linear-gradient(90deg,#eef6ff,#f3fbff);font-weight:700;color:var(--accent);font-size:.78rem}
-
-    /* Form */
-    form{display:grid;gap:.6rem}
-    label{font-size:.9rem;color:var(--muted)}
-    input[type="number"],select{width:100%;padding:.6rem;border-radius:10px;border:1px solid #e7eef9;background:#fbfdff}
-    .actions{display:flex;gap:.5rem;align-items:center}
-    button{padding:.7rem 1rem;border-radius:10px;border:0;cursor:pointer;font-weight:700}
-    button.primary{background:var(--accent);color:white}
-    button.ghost{background:transparent;border:1px solid rgba(11,37,69,0.06)}
-
-    /* Dashboard preview */
-    .grid-2{display:grid;grid-template-columns:1fr 360px;gap:1rem;margin-top:1rem}
-    .transactions table{width:100%;border-collapse:collapse}
-    th,td{padding:.6rem;text-align:left;border-bottom:1px solid #f1f6fb}
-    th{font-size:.85rem;color:var(--muted)}
-
-    /* Footer */
-    footer{padding:2rem 0;margin-top:2rem;color:var(--muted);font-size:.95rem}
-
-    /* Utilities */
-    .muted{color:var(--muted)}
-    .right{text-align:right}
-
-    /* Responsive */
-    @media (max-width:980px){.hero{grid-template-columns:1fr}.plans{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VercelBet — Plateforme d'investissement (€)</title>
+<meta name="description" content="VercelBet — Plateforme statique complète d'investissement en euros, interactive et professionnelle.">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* ===== Variables et thème ===== */
+:root {
+  --bg-light: #f5f8fc;
+  --bg-dark: #0f172a;
+  --text-light: #0b2545;
+  --text-dark: #f1f5f9;
+  --primary: #0263d6;
+  --secondary: #4f46e5;
+  --accent: #06b6d4;
+  --card-light: #ffffff;
+  --card-dark: #1e293b;
+  --border-light: rgba(11,37,69,0.06);
+  --border-dark: rgba(241,245,249,0.1);
+}
+[data-theme="light"] {--bg: var(--bg-light);--text: var(--text-light);--card: var(--card-light);--border: var(--border-light);}
+[data-theme="dark"] {--bg: var(--bg-dark);--text: var(--text-dark);--card: var(--card-dark);--border: var(--border-dark);}
+*,*::before,*::after{box-sizing:border-box;transition:all .3s ease}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;line-height:1.5;color:var(--text);background:var(--bg);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+header{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(10px);padding:1rem}
+.container{max-width:1200px;margin:0 auto;padding:1rem}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{font-weight:700;font-size:1.5rem;color:var(--primary)}
+nav ul{display:flex;gap:1rem;list-style:none;margin:0;padding:0}
+nav a{padding:.5rem 1rem;border-radius:8px;font-weight:500}
+nav a.primary{background:var(--primary);color:white}
+.theme-toggle{cursor:pointer;border:1px solid var(--border);background:transparent;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.hero{display:grid;grid-template-columns:1fr 480px;gap:2rem;align-items:center;padding:4rem 0}
+.hero h1{font-size:2.5rem;margin-bottom:.5rem}
+.hero p{font-size:1.1rem;color:var(--text);opacity:0.85;margin-bottom:1.5rem}
+.stats{display:flex;gap:1rem;margin-top:2rem}
+.stat{background:var(--card);padding:1rem;border-radius:12px;flex:1;text-align:center;box-shadow:0 6px 15px rgba(0,0,0,0.05)}
+.stat strong{display:block;font-size:1.3rem;margin-top:.5rem}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-top:2rem}
+.plan{padding:1.5rem;border-radius:14px;background:var(--card);border:1px solid var(--border);text-align:center;box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+.plan .price{font-size:1.5rem;margin:.5rem 0;color:var(--primary)}
+form{display:grid;gap:.75rem}
+input,select{width:100%;padding:.8rem;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
+button{padding:.9rem 1.2rem;border-radius:10px;border:0;cursor:pointer;font-size:1rem;transition:all .3s}
+button.primary{background:var(--primary);color:white}
+button.primary:hover{background:var(--secondary)}
+footer{padding:2rem 0;margin-top:3rem;text-align:center;color:var(--text);opacity:0.7;font-size:.9rem;border-top:1px solid var(--border)}
+.testimonials{display:flex;gap:1rem;overflow-x:auto;margin-top:2rem}
+.testimonial{min-width:250px;background:var(--card);padding:1rem;border-radius:12px;box-shadow:0 6px 15px rgba(0,0,0,0.05)}
+.chart-container{margin-top:1rem;background:var(--card);padding:1rem;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  <header role="banner">
-    <div class="container nav">
-      <div class="brand">
-        <div class="logo" aria-hidden="true">VB</div>
-        <div>
-          <h1>VercelBet</h1>
-          <div style="font-size:.78rem;color:var(--muted)">Investissements en euros — Prototype professionnel</div>
-        </div>
-      </div>
-      <nav role="navigation" aria-label="Navigation principale">
-        <ul>
-          <li><a href="#features">Fonctionnalités</a></li>
-          <li><a href="#plans">Plans</a></li>
-          <li><a href="#dashboard">Tableau</a></li>
-          <li><a class="cta" href="#signup">S'inscrire</a></li>
-        </ul>
-      </nav>
+<header>
+  <div class="container nav">
+    <div class="logo">VercelBet</div>
+    <nav>
+      <ul>
+        <li><a href="#plans">Plans</a></li>
+        <li><a href="#simulate">Simulateur</a></li>
+        <li><a href="#testimonials">Avis</a></li>
+        <li><a class="primary" href="#signup">S'inscrire</a></li>
+      </ul>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" title="Basculer thème">🌙</button>
+  </div>
+</header>
+<main class="container">
+<section class="hero">
+  <div>
+    <h1>Investissez intelligemment avec <span style="color:var(--primary)">VercelBet</span></h1>
+    <p>Simulez vos gains et découvrez nos plans d’investissement sécurisés et performants.</p>
+    <div class="stats">
+      <div class="stat"><div>Actifs</div><strong>12</strong></div>
+      <div class="stat"><div>Taux max</div><strong>8.5% / an</strong></div>
+      <div class="stat"><div>Investisseurs</div><strong>3 482</strong></div>
     </div>
-  </header>
-
-  <main class="container">
-    <section class="hero" aria-labelledby="hero-title">
-      <div>
-        <h2 id="hero-title" class="headline">VercelBet — Plateforme d'investissement en €</h2>
-        <p class="sub">Investissez facilement. Simulez vos rendements. Suivez l'historique de vos placements. Sécurité et conformité incluses (prototype).</p>
-
-        <div class="kpis" role="list">
-          <div class="kpi card" role="listitem">
-            <div class="muted">Actifs disponibles</div>
-            <strong>18</strong>
-          </div>
-          <div class="kpi card" role="listitem">
-            <div class="muted">Taux annualisé max</div>
-            <strong>9.2% / an</strong>
-          </div>
-          <div class="kpi card" role="listitem">
-            <div class="muted">Investisseurs</div>
-            <strong>5 240</strong>
-          </div>
-        </div>
-
-        <section id="features" style="margin-top:1.25rem;">
-          <h3 style="margin:0 0 .5rem">Fonctionnalités principales</h3>
-          <ul class="muted">
-            <li>Simulateur d'intérêts composés</li>
-            <li>Plans modulables (Conservateur, Équilibré, Dynamique)</li>
-            <li>Historique & export CSV</li>
-            <li>Interface responsive et accessible</li>
-            <li>Prototype prêt à intégrer côté backend (API)</li>
-          </ul>
-        </section>
+  </div>
+  <aside class="card">
+    <h3>Simulateur</h3>
+    <form id="simulateForm">
+      <label for="plan">Plan</label>
+      <select id="plan">
+        <option value="3.2">Conservateur — 3.2%</option>
+        <option value="5.0">Équilibré — 5.0%</option>
+        <option value="8.5">Dynamique — 8.5%</option>
+      </select>
+      <label for="amount">Montant (€)</label>
+      <input type="number" id="amount" value="1000" min="10" step="10">
+      <label for="years">Durée (années)</label>
+      <input type="number" id="years" value="3" min="1" max="30">
+      <button type="button" class="primary" id="simulate">Simuler</button>
+      <div style="margin-top:.8rem">
+        <div style="font-size:.9rem;opacity:0.8">Résultat estimé :</div>
+        <div id="result" style="font-size:1.2rem;font-weight:700">—</div>
       </div>
+    </form>
+    <div class="chart-container">
+      <canvas id="investmentChart"></canvas>
+    </div>
+  </aside>
+</section>
+<section id="plans">
+  <h2>Nos plans d'investissement</h2>
+  <div class="plans">
+    <div class="plan">
+      <h3>Conservateur</h3>
+      <p>Faible risque, rendement stable.</p>
+      <div class="price">3.2% / an</div>
+      <button class="primary">Choisir</button>
+    </div>
+    <div class="plan">
+      <h3>Équilibré</h3>
+      <p>Compromis parfait entre risque et performance.</p>
+      <div class="price">5.0% / an</div>
+      <button class="primary">Choisir</button>
+    </div>
+    <div class="plan">
+      <h3>Dynamique</h3>
+      <p>Risque élevé, rendement maximal.</p>
+      <div class="price">8.5% / an</div>
+      <button class="primary">Choisir</button>
+    </div>
+  </div>
+</section>
+<section id="testimonials">
+  <h2>Avis clients</h2>
+  <div class="testimonials">
+    <div class="testimonial"><strong>Emma</strong><p>Investir sur VercelBet a été simple et rapide, je recommande !</p></div>
+    <div class="testimonial"><strong>Léo</strong><p>Simulation réaliste et plans adaptés à mes besoins.</p></div>
+    <div class="testimonial"><strong>Sofia</strong><p>Une plateforme claire, professionnelle et fiable.</p></div>
+  </div>
+</section>
+</main>
+<footer>
+  © 2025 VercelBet — Tous droits réservés | <a href="#">Mentions légales</a> | <a href="#">Contact</a>
+</footer>
+<script>
+// Theme toggle
+const root = document.documentElement;
+const toggleBtn = document.getElementById('themeToggle');
+toggleBtn.addEventListener('click',()=>{
+  const current=root.getAttribute('data-theme');
+  const next=current==='light'?'dark':'light';
+  root.setAttribute('data-theme',next);
+  toggleBtn.textContent=next==='light'?'🌙':'☀️';
+});
 
-      <aside class="card" aria-labelledby="sim-title">
-        <h3 id="sim-title">Simulateur — estimer vos gains</h3>
-        <form id="sim-form" aria-describedby="sim-result">
-          <label for="plan">Plan</label>
-          <select id="plan">
-            <option value="conservative" data-rate="0.032">Conservateur — 3.2% / an</option>
-            <option value="balanced" data-rate="0.05">Équilibré — 5.0% / an</option>
-            <option value="dynamic" data-rate="0.082">Dynamique — 8.2% / an</option>
-          </select>
-
-          <label for="amount">Montant initial (€)</label>
-          <input id="amount" type="number" min="10" step="10" value="2000" />
-
-          <label for="years">Durée (années)</label>
-          <input id="years" type="number" min="1" max="30" value="5" />
-
-          <div class="actions">
-            <button type="button" class="primary" id="simulate">Calculer</button>
-            <button type="button" class="ghost" id="reset">Réinitialiser</button>
-          </div>
-
-          <div id="sim-result" style="margin-top:.8rem;" aria-live="polite">
-            <div class="muted">Estimation</div>
-            <div id="sim-output" style="font-weight:800;font-size:1.05rem">—</div>
-          </div>
-        </form>
-      </aside>
-    </section>
-
-    <section id="plans" style="margin-top:1.25rem;">
-      <h2 style="margin-bottom:.6rem">Nos plans</h2>
-      <div class="plans">
-        <div class="plan card">
-          <div class="badge">Conservateur</div>
-          <p class="price">3.2% / an</p>
-          <p class="muted">Faible risque — Idéal pour capital stable</p>
-          <p style="margin-top:.6rem"><button class="primary">Choisir</button></p>
-        </div>
-        <div class="plan card">
-          <div class="badge">Équilibré</div>
-          <p class="price">5.0% / an</p>
-          <p class="muted">Risque modéré — Bon équilibre rendement/risque</p>
-          <p style="margin-top:.6rem"><button class="primary">Choisir</button></p>
-        </div>
-        <div class="plan card">
-          <div class="badge">Dynamique</div>
-          <p class="price">8.2% / an</p>
-          <p class="muted">Risque élevé — Pour investisseurs cherchant rendement</p>
-          <p style="margin-top:.6rem"><button class="primary">Choisir</button></p>
-        </div>
-      </div>
-    </section>
-
-    <section id="dashboard" style="margin-top:1.5rem;">
-      <h2>Tableau de bord — aperçu</h2>
-      <div class="grid-2">
-        <div class="card transactions">
-          <h3 style="margin-top:0">Dernières transactions</h3>
-          <table aria-label="Transactions récentes">
-            <thead>
-              <tr><th>Date</th><th>Type</th><th>Montant</th><th>Plan</th><th class="right">Statut</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>2025-08-12</td><td>Investissement</td><td>€2 000,00</td><td>Équilibré</td><td class="right">Complété</td></tr>
-              <tr><td>2025-07-30</td><td>Retrait</td><td>€500,00</td><td>Conservateur</td><td class="right">Traitement</td></tr>
-              <tr><td>2025-06-11</td><td>Investissement</td><td>€1 200,00</td><td>Dynamique</td><td class="right">Complété</td></tr>
-            </tbody>
-          </table>
-          <p style="margin-top:.6rem"><button class="ghost">Exporter CSV</button></p>
-        </div>
-
-        <div class="card">
-          <h3 style="margin-top:0">Portefeuille</h3>
-          <p class="muted">Valeur totale</p>
-          <div style="font-weight:800;font-size:1.25rem;margin-top:.35rem">€13 720,00</div>
-
-          <div style="margin-top:1rem">
-            <div class="muted">Allocation</div>
-            <ul class="muted">
-              <li>Conservateur — 40%</li>
-              <li>Équilibré — 35%</li>
-              <li>Dynamique — 25%</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer style="margin-top:2rem;" class="container">
-      <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
-        <div>
-          <strong>VercelBet</strong>
-          <div class="muted">© 2025 — Prototype. Ne pas utiliser en production sans conformité légale.</div>
-        </div>
-        <div class="muted">Contact: support@vercelbet.example</div>
-      </div>
-    </footer>
-  </main>
-
-  <script>
-    // Utilitaires
-    function formatEUR(n){
-      return n.toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-    }
-
-    // Simulateur intérêt composé annuel
-    document.getElementById('simulate').addEventListener('click', function(){
-      const plan = document.getElementById('plan');
-      const rate = parseFloat(plan.options[plan.selectedIndex].dataset.rate) || 0;
-      const amount = parseFloat(document.getElementById('amount').value) || 0;
-      const years = parseInt(document.getElementById('years').value) || 1;
-
-      if(amount < 10){ alert('Montant minimal: 10 €'); return; }
-
-      const finalAmount = amount * Math.pow(1 + rate, years);
-      const gains = finalAmount - amount;
-      document.getElementById('sim-output').textContent = `${formatEUR(finalAmount)} (gains: ${formatEUR(gains)})`;
-    });
-
-    document.getElementById('reset').addEventListener('click', function(){
-      document.getElementById('amount').value = 2000;
-      document.getElementById('years').value = 5;
-      document.getElementById('plan').selectedIndex = 1;
-      document.getElementById('sim-output').textContent = '—';
-    });
-
-    // Actions de choix rapide pour les plans
-    document.querySelectorAll('.plan button').forEach((btn,i)=>{
-      btn.addEventListener('click', ()=>{
-        document.getElementById('plan').selectedIndex = i;
-        // highlight briefly
-        btn.textContent = 'Sélectionné ✓';
-        setTimeout(()=>btn.textContent='Choisir',900);
-      })
-    });
-  </script>
+// Simulateur & Chart
+const ctx = document.getElementById('investmentChart').getContext('2d');
+let investmentChart = new Chart(ctx, {type:'line',data:{labels:[],datasets:[{label:'Valeur du portefeuille (€)',data:[],borderColor:'var(--primary)',backgroundColor:'rgba(2,99,214,0.2)',fill:true,tension:0.3}]} ,options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+function formatEUR(n){return n.toLocaleString('fr-FR',{style:'currency',currency:'EUR'});}
+document.getElementById('simulate').addEventListener('click',()=>{
+  const r=parseFloat(document.getElementById('plan').value)/100;
+  const a=parseFloat(document.getElementById('amount').value);
+  const y=parseInt(document.getElementById('years').value);
+  if(a<10){alert('Montant minimum : 10 €');return;}
+  const resultEl=document.getElementById('result');
+  resultEl.textContent='💶 Calcul en cours...';
+  setTimeout(()=>{
+    let values=[],labels=[];
+    for(let i=0;i<=y;i++){labels.push(`Année ${i}`);values.push(a*Math.pow(1+r,i));}
+    const final=values[values.length-1];
+    const gains=final-a;
+    resultEl.textContent=`${formatEUR(final)} (gains: ${formatEUR(gains)})`;
+    investmentChart.data.labels=labels;
+    investmentChart.data.datasets[0].data=values;
+    investmentChart.update();
+  },500);
+});
+</script>
 </body>
 </html>
